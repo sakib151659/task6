@@ -9,15 +9,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController _textController = TextEditingController();
+
+  static List<String> mainDataList = [
+    "Apple",
+    "Apricot",
+    "Banana",
+    "Blackberry",
+    "Coconut",
+    "Date",
+    "Fig",
+    "Gooseberry",
+    "Grapes",
+    "Lemon",
+    "Litchi",
+    "Mango",
+    "Orange",
+    "Papaya",
+    "Peach",
+    "Pineapple",
+    "Pomegranate",
+    "Starfruit"
+  ];
+
+  // Copy Main List into New List.
+  List<String> newDataList = List.from(mainDataList);
+
+  onItemChanged(String value) {
+    setState(() {
+      newDataList = mainDataList
+          .where((string) => string.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List <String> names = [
-      'sakib khan', 
-      'rakib',
-      'sahedul',
-      'shuvo',
-      'shamim'
-    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
@@ -42,6 +69,9 @@ class _HomePageState extends State<HomePage> {
                     hintText: 'Saerch',
 
                   ),
+
+                  onChanged: onItemChanged,
+
                 ),
               ),
             )
@@ -49,29 +79,26 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(onPressed: (){
-
           },
               icon: const Icon(Icons.logout))
         ],
 
 
       ),
-      body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: names.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 2),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.teal.shade200,
-              ),
-              margin: const EdgeInsets.all(10),
-              height: 50,
-              child: Center(child: Text(names[index])),
-            );
-          }
-      )
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.all(12.0),
+              children: newDataList.map((data) {
+                return ListTile(
+                  title: Text(data),
+                  onTap: ()=> print(data),);
+              }).toList(),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
